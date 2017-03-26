@@ -1,0 +1,1235 @@
+/*-------------- Global Variables. ----------------*/
+var upworkURL = 'https://www.upwork.com';
+var zendeskURL = 'https://support.upwork.com';
+var apiURL = 'https://upwork.zendesk.com';
+
+var bannerText = '';
+
+var homepageTree = {
+    'Freelancer':[201362778,201362718,201362698,201362758,201362678,211064038,201362728],
+    'Client':[201362668,201362708,202532987,201362768,201362678,201362758,21106403,201362728],
+    'Enterprise':[203575248, 203575268],
+    'Agents':[201367127,201362788,201362658,201362638,201362688,201362738],
+};
+
+var ccfRules = JSON.parse('{"account_information":{"key":44519307,"id":"account_information","title":"Account information","acl":"all","sub":{"create_an_account_cf":{"id":"create_an_account_cf","title":"Create an account","acl":"all"},"membership_plans_cf":{"id":"membership_plans_cf","title":"Membership plans","acl":"all"},"unable_to_sign_in_cf":{"id":"unable_to_sign_in_cf","title":"Unable to sign in","acl":"all"},"account_suspended_cf":{"id":"account_suspended_cf","title":"Account suspended","acl":"all"},"identity_verification_cf":{"id":"identity_verification_cf","title":"Identity verification","acl":"all"},"close_my_account_cf":{"id":"close_my_account_cf","title":"Close my account","acl":"all"},"other_account_information_cf":{"id":"other_account_information_cf","title":"Other","acl":"all"}}},"profile":{"key":44523707,"id":"profile","title":"Profile","acl":"fl_ag","sub":{"edit_personal_info_cf":{"id":"edit_personal_info_cf","title":"Edit personal information","acl":"fl_ag"},"profile_approval_cf":{"id":"profile_approval_cf","title":"Profile approval","acl":"fl_ag"},"change_in_rising_talent_status_cf":{"id":"change_in_rising_talent_status_cf","title":"Change in Rising Talent status","acl":"fl_ag"},"change_in_top_rated_status_cf":{"id":"change_in_top_rated_status_cf","title":"Change in Top Rated status","acl":"fl_ag"},"change_in_jss_score_cf":{"id":"change_in_jss_score_cf","title":"Change in JSS score","acl":"fl_ag"},"skills_tests_and_certification_cf":{"id":"skills_tests_and_certification_cf","title":"Skills tests and certification","acl":"fl_ag"},"edit_team_member_settings_and_permissions_cf":{"id":"edit_team_member_settings_and_permissions_cf","title":"Edit team member settings and permissions","acl":"ag"},"other_profile_cf":{"id":"other_profile_cf","title":"Other","acl":"fl_ag"}}},"find_jobs":{"key":44525407,"id":"find_jobs","title":"Find jobs","acl":"fl_ag","sub":{"save_job_searches_cf":{"id":"save_job_searches_cf","title":"Save job searches","acl":"fl_ag"},"submit_proposals_cf":{"id":"submit_proposals_cf","title":"Submit proposals","acl":"fl_ag"},"find_jobs_unresponsive_client_cf":{"id":"find_jobs_unresponsive_client_cf","title":"Unresponsive Client","acl":"fl_ag"},"connects_cf":{"id":"connects_cf","title":"Connects","acl":"fl_ag"},"other_find_jobs_cf":{"id":"other_find_jobs_cf","title":"Other","acl":"fl_ag"}}},"hire":{"key":44457808,"id":"hire","title":"Hire","acl":"cl","sub":{"post_a_job_cf":{"id":"post_a_job_cf","title":"Post a job","acl":"cl"},"edit_job_post_cf":{"id":"edit_job_post_cf","title":"Edit job post","acl":"cl"},"invitations_cf":{"id":"invitations_cf","title":"Invitations","acl":"cl"},"freelancer_quality_cf":{"id":"freelancer_quality_cf","title":"Freelancer quality","acl":"cl"},"proposal_quality_cf":{"id":"proposal_quality_cf","title":"Proposal quality","acl":"cl"},"other_hire_cf":{"id":"other_hire_cf","title":"Other","acl":"cl"}}},"work_feedback_and_disputes":{"key":44459308,"id":"work_feedback_and_disputes","title":"Work, feedback, and disputes","acl":"all","sub":{"track_time_cf":{"id":"track_time_cf","title":"Track time","acl":"fl_ag"},"update_work_diary_cf":{"id":"update_work_diary_cf","title":"Update Work Diary","acl":"fl_ag"},"report_manual_time_cf":{"id":"report_manual_time_cf","title":"Report manual time","acl":"fl_ag"},"unresponsive_client_cf":{"id":"unresponsive_client_cf","title":"Unresponsive Client","acl":"fl_ag"},"suspended_contract_cf":{"id":"suspended_contract_cf","title":"Suspended contract","acl":"fl_ag"},"request_or_update_tax_information_cf":{"id":"request_or_update_tax_information_cf","title":"Request or update tax information","acl":"fl_ag"},"excessive_or_unauthorized_hours_billed_cf":{"id":"excessive_or_unauthorized_hours_billed_cf","title":"Excessive or unauthorized hours billed","acl":"cl"},"unresponsive_freelancer_cf":{"id":"unresponsive_freelancer_cf","title":"Unresponsive Freelancer","acl":"cl"},"freelancer_work_quality_cf":{"id":"freelancer_work_quality_cf","title":"Freelancer work quality","acl":"cl"},"change_public_feedback_cf":{"id":"change_public_feedback_cf","title":"Change public feedback","acl":"all"},"file_a_dispute_and_dispute_status_cf":{"id":"file_a_dispute_and_dispute_status_cf","title":"File a dispute and dispute status","acl":"all"},"other_work_feedback_and_dispute_cf":{"id":"other_work_feedback_and_dispute_cf","title":"Other","acl":"all"}}},"get_paid":{"key":44460968,"id":"get_paid","title":"Get paid","acl":"fl_ag","sub":{"add_update_withdrawal_method_cf":{"id":"add_update_withdrawal_method_cf","title":"Add/update withdrawal method","acl":"fl_ag"},"withdrawal_not_received_cf":{"id":"withdrawal_not_received_cf","title":"Withdrawal not received","acl":"fl_ag"},"refund_client_cf":{"id":"refund_client_cf","title":"Refund Client","acl":"fl_ag"},"freelancer_service_fee_cf":{"id":"freelancer_service_fee_cf","title":"Freelancer service fee","acl":"fl_ag"},"1099_w9_vat_cf":{"id":"1099_w9_vat_cf","title":"1099/W9/VAT (value-added tax)","acl":"fl_ag"},"other_get_paid_cf":{"id":"other_get_paid_cf","title":"Other","acl":"fl_ag"}}},"make_payments":{"key":44463528,"id":"make_payments","title":"Make payments","acl":"cl","sub":{"add_payment_method_cf":{"id":"add_payment_method_cf","title":"Add payment method","acl":"cl"},"verify_payment_method_cf":{"id":"verify_payment_method_cf","title":"Verify payment method","acl":"cl"},"fixed_price_payments_cf":{"id":"fixed_price_payments_cf","title":"Fixed price payments","acl":"cl"},"hourly_payments_cf":{"id":"hourly_payments_cf","title":"Hourly payments","acl":"cl"},"make_a_bonus_payment_cf":{"id":"make_a_bonus_payment_cf","title":"Make a bonus payment","acl":"cl"},"client_payment_processing_fee_cf":{"id":"client_payment_processing_fee_cf","title":"Client payment processing fee","acl":"cl"},"refund_not_returned_to_payment_source_cf":{"id":"refund_not_returned_to_payment_source_cf","title":"Refund not returned to payment source","acl":"cl"},"other_make_payments_cf":{"id":"other_make_payments_cf","title":"Other","acl":"cl"}}},"system_issues_and_bugs":{"key":44464668,"id":"system_issues_and_bugs","title":"System issues and bugs","acl":"all","sub":{"site_availability_cf":{"id":"site_availability_cf","title":"Site availability","acl":"all"},"team_app_not_tracking_time_cf":{"id":"team_app_not_tracking_time_cf","title":"Team App not tracking time","acl":"all"},"work_diary_cf":{"id":"work_diary_cf","title":"Work Diary","acl":"all"},"send_messages_cf":{"id":"send_messages_cf","title":"Send Messages","acl":"all"},"receive_messages_cf":{"id":"receive_messages_cf","title":"Receive Messages","acl":"all"},"not_getting_email_notifications_cf":{"id":"not_getting_email_notifications_cf","title":"Not getting email notifications","acl":"all"},"mobile_apps_cf":{"id":"mobile_apps_cf","title":"Mobile Apps","acl":"all"},"other_system_issues_and_bugs_cf":{"id":"other_system_issues_and_bugs_cf","title":"Other","acl":"all"}}},"report_suspicious_activity":{"key":44534007,"id":"report_suspicious_activity","title":"Report suspicious activity","acl":"all","sub":{"spam_cf":{"id":"spam_cf","title":"Spam","acl":"all"},"phishing_cf":{"id":"phishing_cf","title":"Phishing","acl":"all"},"fraud_cf":{"id":"fraud_cf","title":"Fraud","acl":"all"},"work_off_the_platform_cf":{"id":"work_off_the_platform_cf","title":"Work off the platform","acl":"all"},"other_suspicious_activity_cf":{"id":"other_suspicious_activity_cf","title":"Other","acl":"all"}}},"other_cf":{"id":"other_cf","title":"Other","acl":"all"}}');
+var topArticles = JSON.parse('{"all":[{"title":"Help with my Job Success Score","link":"https://support.upwork.com/hc/en-us/articles/211068358"},{"title":"Help with my Top Rated status","link":"https://support.upwork.com/hc/en-us/articles/211068468"},{"title":"Client has not paid for work","link":"https://support.upwork.com/hc/en-us/articles/211068308"},{"title":"My Account is suspended","link":"https://support.upwork.com/hc/en-us/articles/216800718"},{"title":"My Contract is suspended","link":"https://support.upwork.com/hc/en-us/articles/211068348"},{"title":"Haven\'t received my withdrawn money","link":"https://support.upwork.com/hc/en-us/articles/211063828"},{"title":"Update my billing method","link":"https://support.upwork.com/hc/en-us/articles/211067998"}],"client":[{"title":"My Account is suspended","link":"https://support.upwork.com/hc/en-us/articles/216800718"},{"title":"Update my billing method","link":"https://support.upwork.com/hc/en-us/articles/211067998"},{"title":"Verify my payment method","link":"https://support.upwork.com/hc/en-us/articles/211068038"},{"title":"How to pay my freelancer?","link":"https://support.upwork.com/hc/en-us/articles/211068218"},{"title":"Unsastified with freelancer\'s work","link":"https://support.upwork.com/hc/en-us/articles/211062158"}],"freelancer":[{"title":"Help with my Job Success Score","link":"https://support.upwork.com/hc/en-us/articles/211068358"},{"title":"Help with my Top Rated status ","link":"https://support.upwork.com/hc/en-us/articles/211068468"},{"title":"Client has not paid for work","link":"https://support.upwork.com/hc/en-us/articles/211068308"},{"title":"My Contract is suspended","link":"https://support.upwork.com/hc/en-us/articles/211068348"},{"title":"Haven\'t received my withdrawn money","link":"https://support.upwork.com/hc/en-us/articles/211063828"},{"title":"Payment isn\'t visible in upwork balance","link":"https://support.upwork.com/hc/en-us/articles/211063698"},{"title":"Direct to Local Bank Fees & Timing","link":"https://support.upwork.com/hc/en-us/articles/211060578"},{"title":"PayPal Fees & Timing","link":"https://support.upwork.com/hc/en-us/articles/211063978"},{"title":"Payoneer Fees & Timing","link":"https://support.upwork.com/hc/en-us/articles/211064008"}],"agency":[{"title":"Help with my Job Success Score","link":"https://support.upwork.com/hc/en-us/articles/211068358"},{"title":"Help with my Top Rated status ","link":"https://support.upwork.com/hc/en-us/articles/211068468"},{"title":"Client has not paid for work","link":"https://support.upwork.com/hc/en-us/articles/211068308"},{"title":"My Contract is suspended","link":"https://support.upwork.com/hc/en-us/articles/211068348"},{"title":"Haven\'t received my withdrawn money","link":"https://support.upwork.com/hc/en-us/articles/211063828"},{"title":"Payment isn\'t visible in upwork balance","link":"https://support.upwork.com/hc/en-us/articles/211063698"}]}');
+
+
+
+
+/* Set Cookie. */
+function setCookie(name,value,days) {
+    var expires = '';
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime()+(days*24*60*60*1000));
+        expires = '; expires='+date.toGMTString();
+    }
+    document.cookie = name+'='+value+expires+'; path=/';
+}
+
+
+/* Get Cookie Value. */
+function getCookie(name) {
+    var nameEQ = name + '=';
+    var ca = document.cookie.split(';');
+    for (var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+
+/* Get Query Parameter. */
+function getQueryParam(name) {
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regexS = "[\\?&]" + name + "=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(window.location.search);
+    if (results == null) {
+        return '';
+    } else {
+        return decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+}
+
+
+/* Get url Parts in Array. */
+function getUrlPartsArray(pathname) {
+    return pathname.substring(1).split(/\//);
+}
+
+if (getQueryParam('tag')) {
+    setCookie('ticket_tag', getQueryParam('tag'));
+}
+
+if (getQueryParam('action')) {
+    setCookie('action', getQueryParam('action'));
+}
+
+
+/* Check, if exists the user tag. */
+function userTagExists(tag) {
+    if ($.isArray(tag)) {
+        for (var i = 0; i < tag.length; i++) {
+            for (var j = 0; j < HelpCenter.user.tags.length; j++) {
+                if (tag[i] == HelpCenter.user.tags[j]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    } else {
+        return $.inArray(tag,HelpCenter.user.tags)!=-1;
+    }
+}
+
+
+/* Check user, is internal. */
+function userIsInternal() {
+    if (HelpCenter && (HelpCenter.user.role == 'agent' || HelpCenter.user.role == 'manager')) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/* Check user, is enterprise. */
+function userIsEnterprise() {
+    if (userTagExists('tag_enterprise') || userTagExists('tag_enterprise_fl')) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/* Check user, Verifiable. */
+function userVerifiable() {
+    var user_tags = HelpCenter.user.tags;
+    if ( userTagExists('tag_freelancer_verified') ) {
+        return false;
+    } else {
+        if ( userTagExists('tag_freelancer_new') ) {
+            return true;
+        } else if( userTagExists('tag_freelancer_existing') ) {
+            return true;
+        } else {
+           return false;
+        }
+    }
+}
+
+
+/* Define Regular Chat Routes. */
+function defaultChatRouting() {
+    var user_tags = HelpCenter.user.tags;
+    if ( userTagExists('tag_enterprise') || userTagExists('tag_enterprise_fl') || userTagExists('tag_csm_cl') ) {
+        return 'Enterprise Support';
+    } else if ( userTagExists('tag_migrated_top_15pcnt_cl')
+         || userTagExists('tag_migrated_top_1k_cl')
+         || userTagExists('tag_psm_cl')
+         || userTagExists('tag_rising_talent')
+         || userTagExists('tag_top_rated')
+         || userTagExists('tag_fl_earn')
+         || userTagExists('tag_cl_spend')
+         || userTagExists('tag_hipo_cl')
+    ) {
+        return 'HV Support';
+    } else {
+        return 'CSS Support';
+    }
+}
+
+
+/* Loads Articles for Category Card. */
+function categoryCardArticles(cat) {
+    $.ajax({
+        url:'/api/v2/help_center/categories/' + cat.attr('data') + '/articles.json?label_names=show_on_home',
+        success: function(data) {
+            var ul = cat.find('ul');
+            for (var a = 0; a < data.articles.length; a++) {
+                var article = data.articles[a];
+                ul.append('<li><a href="' + article.html_url + '">' + article.name + '</a></li>');
+            }
+        }
+    });
+}
+
+/* Loads Category Cards. */
+function categoryCard(homepageTree, categories, t) {
+    $('#homepage_tree .nav-tabs').append('<li class="ng-isolate-scope"><a id="' + t.toLowerCase() + '" href="#" class="ng-binding">' + t + '</a></li>');
+    var tab = $('<div class="category"></div>').appendTo('#homepage_tree .category-tabs');
+    var catIDs = homepageTree[t];
+    for (var i = 0; i < catIDs.length; i++) {
+        var category = categories[catIDs[i]];
+        if (category) {
+            var cat = $('<div class="section-name col-md-4 article-section-wrap" data="' + category.id + '"><div class="article-card"><h2>' + category.name + '</h2><ul></ul><a href="' + category.html_url + '" class="more-btn">More</a></div></div>').appendTo(tab);
+            categoryCardArticles(cat);
+        }
+    }
+}
+
+/* Loads Categories for Section Card. */
+function sectionCardCategories(homepageTree, categories, t, clickIndex, index){
+    $('#category_tree .nav-tabs').append('<li class="ng-isolate-scope"><a href="#" class="ng-binding">' + t + '</a></li>');
+    var tab = $('<ul class="categories-list"></ul>').appendTo('.category-bar');
+    var catIDs = homepageTree[t];
+    for (var i = 0; i < catIDs.length; i++) {
+        var category = categories[catIDs[i]];
+        if (category) {
+            if (categoryId == category.id) {
+                var cat = $('<li><b>' + category.name + '</b></li>').appendTo(tab);
+                if (!clickIndex) clickIndex = index;
+            } else {
+                var cat = $('<li><a href="' + category.html_url + '">' + category.name + '</a></li>').appendTo(tab);
+            }
+        }
+    }
+    return clickIndex;
+}
+
+/* Define Selected Tab on Home Page. */
+function selectedTabHomePage() {
+    var clickIndex;
+    if ( userIsInternal() ) {
+        clickIndex = 3;
+    } else if ( userIsEnterprise() ) {
+        clickIndex = 2;
+    } else if ( userTagExists('tag_type_client') ) {
+        clickIndex = 1;
+    } else {
+        clickIndex = 0;
+    }
+    $('#homepage_tree .nav-tabs li:eq(' + clickIndex + ') a').trigger('click');
+}
+
+
+/* Define Selected Tab on Inner Page. */
+function selectedTabInnerPage(click) {
+    var clickIndex;
+    if ( userIsInternal() ) {
+        clickIndex = 3;
+    } else if ( userIsEnterprise() ) {
+        clickIndex = 2;
+    } else if ( userTagExists('tag_type_client') ) {
+        clickIndex = 1;
+    } else {
+        clickIndex = 0;
+    }
+    $('#category_tree .nav-tabs li:eq(' + (click ? click - 1 : clickIndex ) + ') a').trigger('click');
+}
+
+
+/* Load Top Articles by User Type. */
+function loadTopArticles(topArticles, scope) {
+    $("#article-list").html('');
+    $(topArticles[scope]).each(function(index, el) {
+        $("#article-list").append('<li><a href="'+el.link+'" target="_blank">'+el.title+'</a></li>');
+    });
+}
+
+
+/* Check Access Content Level for Categories - SubCategories. */
+function checkACL( acl ) {
+    var getUserType = $('#user-type-field .select-control').attr('data-value');
+    switch(acl) {
+        case 'all':
+            return true;
+            break;
+        case 'fl_ag':
+            if ( getUserType == 'freelancer' || getUserType == 'agency' ) {
+                return true;
+            } else {
+                return false;
+            }
+            break;
+        case 'cl':
+            if ( getUserType == 'client' ) {
+                return true;
+            } else {
+                return false;
+            }
+            break;
+        case 'ag':
+            if ( getUserType == 'agency' ) {
+                return true;
+            } else {
+                return false;
+            }
+            break;
+    }
+}
+
+
+/* Reload Category List. */
+function reloadCategoryList() {
+    var ccfRules = JSON.parse('{"account_information":{"key":44519307,"id":"account_information","title":"Account information","acl":"all","sub":{"create_an_account_cf":{"id":"create_an_account_cf","title":"Create an account","acl":"all"},"membership_plans_cf":{"id":"membership_plans_cf","title":"Membership plans","acl":"all"},"unable_to_sign_in_cf":{"id":"unable_to_sign_in_cf","title":"Unable to sign in","acl":"all"},"account_suspended_cf":{"id":"account_suspended_cf","title":"Account suspended","acl":"all"},"identity_verification_cf":{"id":"identity_verification_cf","title":"Identity verification","acl":"all"},"close_my_account_cf":{"id":"close_my_account_cf","title":"Close my account","acl":"all"},"other_account_information_cf":{"id":"other_account_information_cf","title":"Other","acl":"all"}}},"profile":{"key":44523707,"id":"profile","title":"Profile","acl":"fl_ag","sub":{"edit_personal_info_cf":{"id":"edit_personal_info_cf","title":"Edit personal information","acl":"fl_ag"},"profile_approval_cf":{"id":"profile_approval_cf","title":"Profile approval","acl":"fl_ag"},"change_in_rising_talent_status_cf":{"id":"change_in_rising_talent_status_cf","title":"Change in Rising Talent status","acl":"fl_ag"},"change_in_top_rated_status_cf":{"id":"change_in_top_rated_status_cf","title":"Change in Top Rated status","acl":"fl_ag"},"change_in_jss_score_cf":{"id":"change_in_jss_score_cf","title":"Change in JSS score","acl":"fl_ag"},"skills_tests_and_certification_cf":{"id":"skills_tests_and_certification_cf","title":"Skills tests and certification","acl":"fl_ag"},"edit_team_member_settings_and_permissions_cf":{"id":"edit_team_member_settings_and_permissions_cf","title":"Edit team member settings and permissions","acl":"ag"},"other_profile_cf":{"id":"other_profile_cf","title":"Other","acl":"fl_ag"}}},"find_jobs":{"key":44525407,"id":"find_jobs","title":"Find jobs","acl":"fl_ag","sub":{"save_job_searches_cf":{"id":"save_job_searches_cf","title":"Save job searches","acl":"fl_ag"},"submit_proposals_cf":{"id":"submit_proposals_cf","title":"Submit proposals","acl":"fl_ag"},"find_jobs_unresponsive_client_cf":{"id":"find_jobs_unresponsive_client_cf","title":"Unresponsive Client","acl":"fl_ag"},"connects_cf":{"id":"connects_cf","title":"Connects","acl":"fl_ag"},"other_find_jobs_cf":{"id":"other_find_jobs_cf","title":"Other","acl":"fl_ag"}}},"hire":{"key":44457808,"id":"hire","title":"Hire","acl":"cl","sub":{"post_a_job_cf":{"id":"post_a_job_cf","title":"Post a job","acl":"cl"},"edit_job_post_cf":{"id":"edit_job_post_cf","title":"Edit job post","acl":"cl"},"invitations_cf":{"id":"invitations_cf","title":"Invitations","acl":"cl"},"freelancer_quality_cf":{"id":"freelancer_quality_cf","title":"Freelancer quality","acl":"cl"},"proposal_quality_cf":{"id":"proposal_quality_cf","title":"Proposal quality","acl":"cl"},"other_hire_cf":{"id":"other_hire_cf","title":"Other","acl":"cl"}}},"work_feedback_and_disputes":{"key":44459308,"id":"work_feedback_and_disputes","title":"Work, feedback, and disputes","acl":"all","sub":{"track_time_cf":{"id":"track_time_cf","title":"Track time","acl":"fl_ag"},"update_work_diary_cf":{"id":"update_work_diary_cf","title":"Update Work Diary","acl":"fl_ag"},"report_manual_time_cf":{"id":"report_manual_time_cf","title":"Report manual time","acl":"fl_ag"},"unresponsive_client_cf":{"id":"unresponsive_client_cf","title":"Unresponsive Client","acl":"fl_ag"},"suspended_contract_cf":{"id":"suspended_contract_cf","title":"Suspended contract","acl":"fl_ag"},"request_or_update_tax_information_cf":{"id":"request_or_update_tax_information_cf","title":"Request or update tax information","acl":"fl_ag"},"excessive_or_unauthorized_hours_billed_cf":{"id":"excessive_or_unauthorized_hours_billed_cf","title":"Excessive or unauthorized hours billed","acl":"cl"},"unresponsive_freelancer_cf":{"id":"unresponsive_freelancer_cf","title":"Unresponsive Freelancer","acl":"cl"},"freelancer_work_quality_cf":{"id":"freelancer_work_quality_cf","title":"Freelancer work quality","acl":"cl"},"change_public_feedback_cf":{"id":"change_public_feedback_cf","title":"Change public feedback","acl":"all"},"file_a_dispute_and_dispute_status_cf":{"id":"file_a_dispute_and_dispute_status_cf","title":"File a dispute and dispute status","acl":"all"},"other_work_feedback_and_dispute_cf":{"id":"other_work_feedback_and_dispute_cf","title":"Other","acl":"all"}}},"get_paid":{"key":44460968,"id":"get_paid","title":"Get paid","acl":"fl_ag","sub":{"add_update_withdrawal_method_cf":{"id":"add_update_withdrawal_method_cf","title":"Add/update withdrawal method","acl":"fl_ag"},"withdrawal_not_received_cf":{"id":"withdrawal_not_received_cf","title":"Withdrawal not received","acl":"fl_ag"},"refund_client_cf":{"id":"refund_client_cf","title":"Refund Client","acl":"fl_ag"},"freelancer_service_fee_cf":{"id":"freelancer_service_fee_cf","title":"Freelancer service fee","acl":"fl_ag"},"1099_w9_vat_cf":{"id":"1099_w9_vat_cf","title":"1099/W9/VAT (value-added tax)","acl":"fl_ag"},"other_get_paid_cf":{"id":"other_get_paid_cf","title":"Other","acl":"fl_ag"}}},"make_payments":{"key":44463528,"id":"make_payments","title":"Make payments","acl":"cl","sub":{"add_payment_method_cf":{"id":"add_payment_method_cf","title":"Add payment method","acl":"cl"},"verify_payment_method_cf":{"id":"verify_payment_method_cf","title":"Verify payment method","acl":"cl"},"fixed_price_payments_cf":{"id":"fixed_price_payments_cf","title":"Fixed price payments","acl":"cl"},"hourly_payments_cf":{"id":"hourly_payments_cf","title":"Hourly payments","acl":"cl"},"make_a_bonus_payment_cf":{"id":"make_a_bonus_payment_cf","title":"Make a bonus payment","acl":"cl"},"client_payment_processing_fee_cf":{"id":"client_payment_processing_fee_cf","title":"Client payment processing fee","acl":"cl"},"refund_not_returned_to_payment_source_cf":{"id":"refund_not_returned_to_payment_source_cf","title":"Refund not returned to payment source","acl":"cl"},"other_make_payments_cf":{"id":"other_make_payments_cf","title":"Other","acl":"cl"}}},"system_issues_and_bugs":{"key":44464668,"id":"system_issues_and_bugs","title":"System issues and bugs","acl":"all","sub":{"site_availability_cf":{"id":"site_availability_cf","title":"Site availability","acl":"all"},"team_app_not_tracking_time_cf":{"id":"team_app_not_tracking_time_cf","title":"Team App not tracking time","acl":"all"},"work_diary_cf":{"id":"work_diary_cf","title":"Work Diary","acl":"all"},"send_messages_cf":{"id":"send_messages_cf","title":"Send Messages","acl":"all"},"receive_messages_cf":{"id":"receive_messages_cf","title":"Receive Messages","acl":"all"},"not_getting_email_notifications_cf":{"id":"not_getting_email_notifications_cf","title":"Not getting email notifications","acl":"all"},"mobile_apps_cf":{"id":"mobile_apps_cf","title":"Mobile Apps","acl":"all"},"other_system_issues_and_bugs_cf":{"id":"other_system_issues_and_bugs_cf","title":"Other","acl":"all"}}},"report_suspicious_activity":{"key":44534007,"id":"report_suspicious_activity","title":"Report suspicious activity","acl":"all","sub":{"spam_cf":{"id":"spam_cf","title":"Spam","acl":"all"},"phishing_cf":{"id":"phishing_cf","title":"Phishing","acl":"all"},"fraud_cf":{"id":"fraud_cf","title":"Fraud","acl":"all"},"work_off_the_platform_cf":{"id":"work_off_the_platform_cf","title":"Work off the platform","acl":"all"},"other_suspicious_activity_cf":{"id":"other_suspicious_activity_cf","title":"Other","acl":"all"}}},"other_cf":{"id":"other_cf","title":"Other","acl":"all"}}');
+    $('#category-field .select-control').attr({
+        'data-category-key' : '',
+        'data-category' : '',
+        'data-subcategory' : ''
+    }).text('Please select...');
+    $.each(ccfRules, function(index, val) {
+        if ( ! checkACL(val.acl) ) {
+            $('#cat-id-'+val.id).parents().eq(0).hide();
+        } else {
+            $('#cat-id-'+val.id).parents().eq(0).show();
+            if ( val.sub != undefined ) {
+                $.each(val.sub, function(index, value) {
+                    if ( ! checkACL(value.acl) ) {
+                        $('#sub-cat-id-'+value.id).parents().eq(0).hide();
+                    } else {
+                        $('#sub-cat-id-'+value.id).parents().eq(0).show();
+                    }
+                });
+            }
+        }
+    });
+}
+
+
+$(document).ready(function() {
+
+    /* Social Share Popups. */
+    $('.share a').click(function(e) {
+        e.preventDefault();
+        window.open(this.href, '', 'height = 500, width = 500');
+    });
+
+
+    /* Toggle the Share Dropdown in Communities. */
+    $('.share-label').on('click', function(e) {
+        e.stopPropagation();
+        var isSelected = this.getAttribute('aria-selected') == 'true';
+        this.setAttribute('aria-selected', !isSelected);
+        $('.share-label').not(this).attr('aria-selected', 'false');
+    });
+
+
+    $(document).on('click', function() {
+        $('.share-label').attr('aria-selected', 'false');
+    });
+
+    $('#scroll-to-kb').click(function() {
+        $('html, body').animate({
+            scrollTop: document.getElementById('homepage_tree').offsetTop
+        },1500, 'easeOutExpo');
+    });
+
+
+    $('#user-menu').find('a.my-activities').text('My Requests');
+    $('.searchbox').parent().prependTo('.related-articles-column');
+    $('#query').attr('placeholder', 'Ask your question here');
+    $('.breadcrumbs').addClass('breadcrumb').addClass('clearfix').removeClass('breadcrumbs');
+    $('.my-activities-header').remove();
+    $('.my-activities-nav').remove();
+    $('.article-vote-up').html('<span class="glyphicon air-icon-hand-yes m-0-left m-0-right"></span>');
+    $('.article-vote-down').html('<span class="glyphicon air-icon-hand-no m-0-left m-0-right"></span>');
+    $('.promoted-articles').find('h3').text('Most frequent questions from users like you');
+    $('.article-more-questions').hide();
+
+
+    /* Submit Request Conditional Fields. */
+    if (cfaRules && theField) {
+        $('.request_custom_fields_' + theField).addClass('theField');
+        for (var i = 0; i < cfaRules.length; i++) {
+            if (cfaRules[i].field == theField) {
+                for (var j = 0; j < cfaRules[i].select.length; j++) {
+                    $('.request_custom_fields_' + cfaRules[i].select[j]).addClass('theFieldSub');
+                }
+            }
+        }
+        $('.theFieldSub input').each(function() {
+            if ($(this).val() && ($(this).val() != '-')) {
+                $('#new_request').addClass('showFields');
+            }
+        });
+        $('.theFieldSub input').change(function() {
+            if ($(this).val() && ($(this).val() != '-')) {
+                $('#new_request').addClass('showFields');
+            } else {
+                $('#new_request').removeClass('showFields');
+            }
+        });
+        $('#request_custom_fields_44456188').change(function() {
+            if ($(this).val() && ($(this).val() == 'other_cf')) {
+                $('#new_request').addClass('showFields');
+            } else {
+                $('#new_request').removeClass('showFields');
+            }
+        });
+    }
+
+    /* Show Banner Message. */
+    if (bannerText) {
+        $('.alert-zone').prepend('<div id="banner">' + bannerText + '</div>').show();
+    }
+
+
+/* Form Controls. */
+    /* Show Form Controls When the TEXTAREA Receives focus or backbutton is used and value exists. */
+    var $answerbodyTextarea = $('.answer-body textarea'),
+    $answerFormControls = $('.answer-form-controls'),
+    $commentContainerTextarea = $('.comment-container textarea'),
+    $commentContainerFormControls = $('.comment-form-controls');
+
+    $answerbodyTextarea.one('focus', function() {
+        $answerFormControls.show();
+    });
+
+    $commentContainerTextarea.one('focus', function() {
+        $commentContainerFormControls.show();
+    });
+
+    if ($commentContainerTextarea.val() !== '') {
+        $commentContainerFormControls.show();
+    }
+
+    if ($answerbodyTextarea.val() !== '') {
+        $answerFormControls.show();
+    }
+/* Form Controls. */
+
+
+/* KB. */
+    if ($('#homepage_tree').length) {
+        $.ajax({
+            url: '/api/v2/help_center/categories.json?per_page=1000',
+            success: function(data) {
+                var categories = []
+;                for (var c = 0; c < data.categories.length; c++) {
+                    categories[data.categories[c].id] = data.categories[c];
+                }
+                for (var t in  homepageTree) {
+                    if ( t == 'Agents' ) {
+                        if ( userIsInternal() ) {
+                            categoryCard(homepageTree, categories, t);
+                        }
+                    } else {
+                        categoryCard(homepageTree, categories, t);
+                    }
+                }
+                $('#homepage_tree .nav-tabs li a').click(function(e) {
+                    e.preventDefault();
+                    if (!$(this).parent().hasClass('active')) {
+                        $('#homepage_tree .nav-tabs li').removeClass('active');
+                        $('#homepage_tree .category').removeClass('active');
+                        var index = $(this).parent().index();
+                        $('#homepage_tree .nav-tabs li:eq(' + index + ')').addClass('active');
+                        $('#homepage_tree .category:eq(' + index + ')').addClass('active');
+                    }
+                });
+                selectedTabHomePage();
+            }
+        });
+    }
+
+    if ($('#category_tree').length) {
+        $.ajax({
+            url: '/api/v2/help_center/categories.json?per_page=1000',
+            success: function(data) {
+                var categories = [];
+                for (var c = 0; c < data.categories.length; c++) {
+                    categories[data.categories[c].id] = data.categories[c];
+                }
+                var index = 1;
+                var clickIndex = 0;
+                for (var t in  homepageTree) {
+                    if ( t == 'Agents' ) {
+                        if ( userIsInternal() ) {
+                            clickIndex = sectionCardCategories(homepageTree, categories, t, clickIndex, index);
+                        }
+                    } else {
+                        clickIndex = sectionCardCategories(homepageTree, categories, t, clickIndex, index);
+                    }
+                    index++;
+                }
+                $('#category_tree .nav-tabs li a').click(function(e) {
+                    e.preventDefault();
+                    if (!$(this).parent().hasClass('active')) {
+                        $('#category_tree .nav-tabs li').removeClass('active');
+                        $('.categories-list').removeClass('active');
+                        var index = $(this).parent().index();
+                        $('#category_tree .nav-tabs li:eq(' + index + ')').addClass('active');
+                        $('.categories-list:eq(' + index + ')').addClass('active');
+                    }
+                });
+                selectedTabInnerPage(clickIndex);
+            }
+        });
+    }
+
+
+    if ($('#section_tree').length) {
+        $.ajax({
+            url: '/api/v2/help_center/sections/' + sectionId + '.json',
+            success: function(data) {
+                $('.category-parent').attr('href', '/hc/en-us/categories/' + data.section.category_id);
+                $.ajax({
+                    url: '/api/v2/help_center/categories/' + data.section.category_id + '.json',
+                    success: function(data) {
+                        $('.section-title').html(data.category.name);
+                    }
+                });
+                $.ajax({
+                    url: '/api/v2/help_center/categories/' + data.section.category_id + '/sections.json?per_page=100',
+                    success: function(data) {
+                        for (var s = 0; s < data.sections.length; s++) {
+                            var section = data.sections[s];
+
+                            if (section.id == sectionId) {
+                                $('#section_tree').append('<li class="active"><a href="#">' + section.name + '</a></li>');
+                            } else {
+                                $('#section_tree').append('<li><a href="' + section.html_url + '">' + section.name + '</a></li>');
+                            }
+                        }
+                        $('.category-parent').attr('href', '/hc/en-us/categories/' + data.section.category_id);
+                    }
+                });
+            }
+        });
+    }
+/* KB. */
+
+
+/* Sidebar WIdgets. */
+    if (HelpCenter && HelpCenter.user.role == 'anonymous') {
+        $.ajax({
+            type: 'GET',
+            url: upworkURL + '/api/auth/v1/info.json',
+            dataType: 'json',
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function(data) {
+                if (data.auth_user) {
+                    window.location.href = '/login?return_to=' + document.URL;
+                }
+            }
+        });
+    }
+
+
+    $('#upworkLogin').click(function() {
+        $(this).text('Redirecting ...');
+        window.location.href ='/login';
+    });
+/* Sidebar WIdgets. */
+
+
+/* Live Chat. */
+    if (typeof $zopim != 'undefined') {
+        $zopim(function() {
+            $zopim.livechat.hideAll();
+            $zopim.livechat.setOnConnected(function() {
+                $('#support-channel-chat, #support-channel-chat-no-throttle').click(function(e) {
+                    e.preventDefault();
+                    $('#submission_channel_select').dialog('close');
+                    $.ajax(apiURL + '/api/v2/users/me.json', {
+                        type: 'GET',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        success: function(data) {
+                            if ( defaultChatRouting() == 'Enterprise Support' ) {
+                                if ($zopim.livechat.departments.getDepartment('Enterprise Support') != undefined) {
+                                    if ($zopim.livechat.departments.getDepartment('Enterprise Support').status == 'online') {
+                                        $zopim.livechat.departments.setVisitorDepartment('Enterprise Support');
+                                    } else {
+                                        $zopim.livechat.departments.setVisitorDepartment('HV Support');
+                                    }
+                                }
+                            } else {
+                                $zopim.livechat.departments.setVisitorDepartment(defaultChatRouting());
+                            }
+                            if (data.user.name) $zopim.livechat.setName(data.user.name);
+                            if (data.user.email) $zopim.livechat.setEmail(data.user.email);
+                            if (data.user.phone) $zopim.livechat.setPhone(data.user.phone);
+                            $zopim(function() {
+                                $zopim.livechat.window.show();
+                                $zopim.livechat.addTags(
+                                    $('#user-type-field .select-control').attr('data-value'),
+                                    $('#category-field .select-control').attr('data-category'),
+                                    ( $('#category-field .select-control').attr('data-subcategory') !== '' ? $('#category-field .select-control').attr('data-subcategory') : '')
+                                );
+                                $zopim.livechat.say($('#request-description-channel-field .textarea-control').val());
+                            });
+                        }
+                    });
+                });
+                $('#verify-init').click(function(e) {
+                    e.preventDefault();
+                    $.ajax(apiURL + '/api/v2/users/me.json', {
+                        type: 'GET',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        success: function(data) {
+                            $zopim.livechat.departments.setVisitorDepartment('CS-MQ');
+                            if (data.user.name) $zopim.livechat.setName(data.user.name);
+                            if (data.user.email) $zopim.livechat.setEmail(data.user.email);
+                            if (data.user.phone) $zopim.livechat.setPhone(data.user.phone);
+                            $zopim(function() {
+                                $zopim.livechat.window.show();
+                                $zopim.livechat.say('I want to verify my profile.');
+                            });
+                        }
+                    });
+                });
+            });
+        });
+    }
+/* Live chat. */
+
+
+
+
+/* Contact Flow. */
+
+/* Config Modals. */
+$('#contact-step-1').dialog({
+    autoOpen:false,
+    resizable: false,
+    minHeight: 450,
+    width: 800
+});
+$('#submission_channel_select').dialog({
+    autoOpen:false,
+    resizable: false,
+    width: 800,
+    open: function() {
+        if ( userTagExists('tag_is_eligible_for_chat') ) {
+            dataLayer.push({
+                'event': 'CF event',
+                'Event title': 'Solution loaded : chat'
+            });
+        }
+        if ( userTagExists('tag_is_eligible_for_ticket') ) {
+            dataLayer.push({
+                'event': 'CF event',
+                'Event title': 'Solution loaded : ticket'
+            });
+        }
+        if ( userTagExists('tag_is_eligible_for_phone') ) {
+            dataLayer.push({
+                'event': 'CF event',
+                'Event title': 'Solution loaded : phone'
+            });
+        }
+        dataLayer.push({
+            'event': 'CF event',
+            'Event title': 'Solution loaded : community'
+        });
+        if (
+            ! userTagExists('tag_is_eligible_for_chat') &&
+            ! userTagExists('tag_is_eligible_for_ticket') &&
+            ! userTagExists('tag_is_eligible_for_phone')
+        ) {
+            dataLayer.push({
+                'event': 'CF event',
+                'Event title': 'Solution loaded : HQ'
+            });
+        }
+    }
+});
+$('#ticket-form-modal').dialog({
+    autoOpen:false,
+    resizable: false,
+    width: 800,
+    open: function() {
+        dataLayer.push({
+            'event': 'CF event',
+            'Event title': 'Window loaded',
+            'Window name': 'Ticket Details Window'
+        });
+    }
+});
+$('#ticket-success-modal').dialog({
+    autoOpen:false,
+    resizable: false,
+    width: 600,
+    height: 320
+});
+$('#ticket-failed-modal').dialog({
+    autoOpen:false,
+    resizable: false,
+    width: 800,
+    height: 450
+});
+
+
+
+
+/* Init Modal. */
+loadTopArticles(topArticles, 'all');
+$('.ui-dialog-titlebar-close, .close-contact-flow-modal').click(function(event) {
+    location.reload();
+});
+$('#contact-init').click(function(event) {
+    $('#contact-step-1').dialog('open');
+});
+$('#contact-step-1-next').click(function(event) {
+    $('#contact-step-1').dialog('close');
+});
+$('.support-channel-ticket').click(function(event) {
+    $('#ticket-form-modal').dialog('open');
+    $('#submission_channel_select').dialog('close');
+});
+
+
+
+
+/* Form Control :: Category. */
+$.each(ccfRules, function(index, val) {
+    if ( val.sub != undefined ) {
+        var cat = $('<li><span id="cat-id-'+val.id+'" class="has-child" data-category-key="'+val.key+'" data-category="'+val.id+'">'+val.title+'</span></li>').appendTo('#category-field .select-control-list');
+        if ( val.id == 'report_suspicious_activity' ) {
+            var subCat = $('<ul class="subcategory-list menu-from-bottom"></ul>').appendTo(cat);
+        } else {
+            var subCat = $('<ul class="subcategory-list"></ul>').appendTo(cat);
+        }
+        $.each(val.sub, function(index, value) {
+            $('<li><span id="sub-cat-id-'+value.id+'" data-subcategory="'+value.id+'">'+value.title+'</span></li>').appendTo(subCat);
+        });
+    } else {
+        var cat = $('<li><span id="cat-id-'+val.id+'" data-category="'+val.id+'">'+val.title+'</span></li>').appendTo('#category-field .select-control-list');
+    }
+});
+$('#category-field .select-control').click(function(event) {
+    if ( $(this).hasClass('active') ) {
+        $('#category-field .select-control-list').hide('slideUp');
+    } else {
+        $('#category-field .select-control-list').show('slideDown');
+    }
+    $(this).toggleClass('active');
+});
+$('#category-field .select-control-list li span').click(function(event) {
+    if ( ! $(this).hasClass('has-child') ) {
+        var dataCategory = $(this).parents().eq(2).children('.has-child').text();
+        var dataCategoryID = $(this).parents().eq(2).children('.has-child').attr('data-category');
+        var dataCategoryKey = $(this).parents().eq(2).children('.has-child').attr('data-category-key');
+        var dataSubCategory = $(this).text();
+        var dataSubCategoryID = $(this).attr('data-subcategory');
+        if ( dataCategory == '' ) {
+            $('#category-field .select-control').attr({
+                'data-category-key' : '',
+                'data-category' : dataCategoryID,
+                'data-subcategory' : ''
+            }).text(dataSubCategory);
+        } else {
+            $('#category-field .select-control').attr({
+                'data-category-key' : dataCategoryKey,
+                'data-category' : dataCategoryID,
+                'data-subcategory' : dataSubCategoryID
+            }).text(dataCategory + ' > ' +dataSubCategory);
+        }
+        if ( $('#category-field .select-control').hasClass('active') ) {
+            $('#category-field .select-control-list').hide('slideUp');
+            $('#top-article-list').hide('slideUp');
+            $('#request-description').show('slideDown');
+        } else {
+            $('#category-field .select-control-list').show('slideDown');
+        }
+        $('#category-field .select-control').toggleClass('active');
+    }
+});
+
+
+
+
+$('#submit-ticket').click(function(event) {
+    if ( $('#request-description-field .textarea-control').val() !== '' ) {
+        $.ajax(apiURL + '/api/v2/users/me.json', {
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json',
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function(data) {
+                var uploads = [];
+                $.each($('#attachment-list li'), function(index, val) {
+                     uploads.push($(this).attr('data-upload-token'));
+                });
+
+                var custom_fields = [
+                    { id: 44456188, value: $('#category-field .select-control').attr('data-category') }
+                ];
+
+                if ($('#category-field .select-control').attr('data-category-key')) {
+                    custom_fields.push({
+                        id: $('#category-field .select-control').attr('data-category-key'),
+                        value: $('#category-field .select-control').attr('data-subcategory')
+                    });
+                }
+
+                var request_subject = 'Request from ' + data.user.name + ': ' + $('#category-field .select-control').text();
+
+                var request_body = $('#request-description-field .textarea-control').val();
+                request_body = request_body + "\n" + "==== ==== ==== ==== ==== ====" + "\n";
+                request_body = request_body + "Contract ID: " + $('#contract-field .text-control').val() + "\n";
+                request_body = request_body + "Client/Freelancer Name: " + $('#client-freelancer-field .text-control').val() + "\n";
+
+                var request_data = { "request": { "requester": { "email": data.user.email },"subject": request_subject,"comment": {"body": request_body,"uploads": uploads},"custom_fields": custom_fields } };
+
+                $.ajax( apiURL + '/api/v2/requests.json', {
+                    type: 'POST',
+                    data: JSON.stringify(request_data),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    headers: { 'X-CSRF-Token': data.user.authenticity_token },
+                    error: function(data) {
+                        $('#ticket-form-modal').dialog('close');
+                        $('#ticket-failed-modal').dialog('open');
+                    },
+                    success: function(data) {
+                        $('#result-ticket-id').text(data.request.id).attr({
+                            'href': '/hc/en-us/requests/' + data.request.id
+                        });
+                        dataLayer.push({
+                            'event': 'CF event',
+                            'Event title': 'Request started',
+                            'Ticket id': data.request.id
+                        });
+                        $('#ticket-form-modal').dialog('close');
+                        $('#ticket-success-modal').dialog('open');
+                    }
+                });
+            }
+        });
+    } else {
+        alert('"Name your issue" or "Provide more details" field(s) not should be empty');
+    }
+});
+
+
+/* Upload Handler. */
+$('#attachment-handler').click(function(e) {
+    e.preventDefault();
+    total_file = $('#attachment-list li').length;
+    if ( total_file <= 5 ) {
+        $('#attachments').click();
+    } else {
+        alert('Sorry. You can only attach up to 5 files.');
+    }
+});
+$('#attachments').change(function() {
+    $('#attachment-handler').attr({'disabled' : 'disabled'}).css({'opacity' : .4});
+    $('#submit-ticket').attr({'disabled' : 'disabled'}).css({'opacity' : .4});
+    var uploaded_files = $(this);
+    var total_file = 0;
+    total_file = $('#attachment-list li').length + uploaded_files[0].files.length;
+    if ( total_file <= 5 ) {
+        $.ajax(apiURL + '/api/v2/users/me.json', {
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json',
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function(data) {
+                $.each(uploaded_files[0].files, function(index, val) {
+                    var uploadedItem = $('<li>'+val.name+'<span class="remove-uploaded-item">X</span><div class="uploading-status"></div></li>').appendTo('#attachment-list');
+                    var attachmentURL = apiURL + '/api/v2/uploads.json?filename=' + val.name;
+                    $.ajax({
+                        url: attachmentURL,
+                        type: 'POST',
+                        data: val,
+                        processData: false,
+                        dataType: 'json',
+                        contentType: 'application/binary',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        headers: { 'X-CSRF-Token': data.user.authenticity_token },
+                        xhr: function(uploadedItem) {
+                            myXhr = $.ajaxSettings.xhr();
+                            if(myXhr.upload){
+                                if (myXhr.upload.lengthComputable) {
+                                    var max = myXhr.upload.total;
+                                    var current = myXhr.upload.loaded;
+                                    var percentage = (current * 100)/max;
+
+                                    if (Percentage >= 100) {
+                                        uploadedItem.children('.uploading-status').css({ width: '100%' });
+                                    } else {
+                                        uploadedItem.children('.uploading-status').css({ width: percentage+'%' });
+                                    }
+                                }
+                            }
+                            return myXhr;
+                        },
+                        success: function(data) {
+                            uploadedItem.children('.uploading-status').css({ width: '100%' });
+                            uploadedItem.attr({'data-upload-token':data.upload.token});
+                        }
+                    });
+                    $('#attachment-handler').removeAttr('disabled').css({'opacity' : 1});
+                    $('#submit-ticket').removeAttr('disabled').css({'opacity' : 1});
+                });
+            }
+        });
+    } else {
+        alert('Sorry. You can only attach up to 5 files.');
+        $('#attachment-handler').removeAttr('disabled').css({'opacity' : 1});
+        $('#submit-ticket').removeAttr('disabled').css({'opacity' : 1});
+    }
+});
+
+
+/* Remove uploaded file from attachment list. */
+$('#attachment-list').on('click', 'li .remove-uploaded-item', function(event){
+    $(this).parents().eq(0).remove();
+});
+
+/* Navigate to Upwork Community.  */
+$('.support-channel-community').click(function(event){
+    var qString = $('#request-description-channel-field .textarea-control').val();
+    qString = encodeURI(qString);
+    window.open(
+        'https://community.upwork.com/t5/forums/searchpage/tab/message?q=' + qString,
+        '_blank'
+    );
+});
+
+
+/* Navigate to Upwork Hiring HQ.  */
+$('.support-channel-hiring').click(function(event){
+    window.open(
+        'https://www.upwork.com/hiring',
+        '_blank'
+    );
+});
+
+
+/* Form Control :: User Type. */
+$('#user-type-field .select-control').click(function(event) {
+    if ( $(this).hasClass('active') ) {
+        $('#user-type-field .select-control-list').hide('slideUp');
+    } else {
+        $('#user-type-field .select-control-list').show('slideDown');
+        $('#category-field .select-control').removeClass('active');
+        $('#category-field .select-control-list').hide('slideUp');
+    }
+    $(this).toggleClass('active');
+});
+$('#user-type-field .select-control-list li span').click(function(event) {
+    loadTopArticles(topArticles, $(this).attr('data-value'));
+    $('#user-type-field .select-control-list li').removeClass('active');
+    $(this).toggleClass('active');
+    $('#user-type-field .select-control').text($(this).text())
+        .attr({'data-value': $(this).attr('data-value')});
+    if ( $('#user-type-field .select-control').hasClass('active') ) {
+        $('#user-type-field .select-control-list').hide('slideUp');
+    } else {
+        $('#user-type-field .select-control-list').show('slideDown');
+    }
+    $('#user-type-field .select-control').toggleClass('active');
+    reloadCategoryList();
+    $('#category-field').show('slideDown');
+});
+
+
+/* Track changes of Ticker. */
+$('#request_description').keyup(function(event){
+    if ( $('#request_description').val() != '' ) {
+        $('#request_subject').val( $('#request_description').val() );
+        $('#contact-step-1-next').removeAttr('disabled').css({'opacity' : 1});
+    } else {
+        $('#contact-step-1-next').attr({'disabled' : 'disabled'}).css({'opacity' : .4});
+    }
+    $('#request-description-channel-field .textarea-control').val($('#request_description').val());
+    $('#request-description-field .textarea-control').val($('#request_description').val());
+});
+$('#request-description-channel-field .textarea-control').keyup(function(event){
+    $('#request-description-field .textarea-control').val($('#request-description-channel-field .textarea-control').val());
+});
+$('#request-description-field .textarea-control').keyup(function(event){
+    $('#request_description').val($('#request-description-channel-field .textarea-control').val());
+});
+
+
+
+
+/* Throttle, Support Chat. */
+if ( userTagExists('tag_is_eligible_for_chat') ) {
+    $('.has-throttle .support-channel-chat').css({'display' : 'inline-block'});
+} else {
+    $('.has-throttle .support-channel-chat').remove();
+}
+
+/* Throttle, Support Ticket. */
+if ( userTagExists('tag_is_eligible_for_ticket') ) {
+    $('.has-throttle .support-channel-ticket').css({'display' : 'inline-block'});
+} else {
+    $('.has-throttle .support-channel-ticket').remove();
+}
+
+/* Throttle, Support Phone Number. */
+if ( userTagExists('tag_is_eligible_for_phone') ) {
+    var user_tags = HelpCenter.user.tags
+    var country_tag  = 'tag_country_united_states';
+    $.each(user_tags, function(index) {
+        if (user_tags[index].match(/tag_country_/)) {
+            country_tag = user_tags[index];
+            return false;
+        }
+    });
+    var country = country_tag.substring(12, country_tag.length);
+    if ( userTagExists('tag_enterprise') || userTagExists('tag_enterprise_fl') || userTagExists('tag_csm_cl') ) {
+        switch (country) {
+            case 'united_states':
+                phone_number = '+1 (866) 640 0544';
+                schedule = 'Mon-Fri 6AM - 6PM PST';
+                break;
+            case 'united_kingdom':
+                phone_number = '+44 (20) 3409 2451';
+                schedule = 'Mon-Fri 10AM - 6PM CET';
+                break;
+            default:
+                phone_number = '+1 (650) 316 8006';
+                schedule = 'Mon-Fri 6AM - 6PM PST';
+        }
+    } else {
+        phone_number = '+1 (855) 676-3375';
+        schedule = 'Mon-Fri 24 hrs/day';
+    }
+    $('.support-channel-phone').html('<span class="glyphicon air-icon-call fontz-30 m-0-left"></span><span class="phone-number"><a href=tel:' + phone_number.replace(/\s/g, '').replace(/\(|\)/g, "").replace(/\-/g, "") + '">' + phone_number + '</a><div class="phone-schedule">' + schedule + '</div></span>');
+    $('.has-throttle .support-channel-phone').css({'display' : 'inline-block'});
+} else {
+    $('.has-throttle .support-channel-phone').remove();
+}
+
+/* Throttle, Hiring HQ. */
+if (
+    ! userTagExists('tag_is_eligible_for_chat') &&
+    ! userTagExists('tag_is_eligible_for_ticket') &&
+    ! userTagExists('tag_is_eligible_for_phone')
+) {
+    $('.has-throttle .support-channel-hiring').css({'display' : 'inline-block'});
+} else {
+    $('.has-throttle .support-channel-hiring').remove();
+}
+
+/* Throttle, Profile Verify. */
+if ( userVerifiable() ) {
+    if ( $('#verify-init').parent().hasClass('list-item') ) {
+        $('#verify-init').parent().show();
+    } else {
+        $('#verify-init').show();
+    }
+} else {
+    if ( $('#verify-init').parent().hasClass('list-item') ) {
+        $('#verify-init').parent().remove();
+    } else {
+        $('#verify-init').remove();
+    }
+}
+
+
+
+
+/* Google Analytics Tracking. */
+var UserTypeTag = HelpCenter.user.tags;
+$.each(UserTypeTag, function(index, value) {
+if (value == 'tag_earned_last_30d') {
+    UserTypeTag.splice(index, 1);
+} else if (value == 'tag_earned_last_60d') {
+    UserTypeTag.splice(index, 1);
+} else if (value == 'tag_cl_1yr_no_post') {
+    UserTypeTag.splice(index, 1);
+} else if (value == 'ag_cl_6mos_no_post') {
+    UserTypeTag.splice(index, 1);
+} else if (value == 'tag_tier_top_rated') {
+    UserTypeTag.splice(index, 1);
+} else if (value == 'tag_tier_rising_talent') {
+    UserTypeTag.splice(index, 1);
+}
+});
+UserTypeTag = UserTypeTag.join(', ');
+if ( userIsInternal() ) {
+    if ( UserTypeTag != '' ) {
+        UserTypeTag = UserTypeTag + ', agent';
+    } else {
+        UserTypeTag = UserTypeTag + 'agent';
+    }
+}
+dataLayer.push({
+    'UserID': HelpCenter.user.identifier,
+    'UserTypeTag': UserTypeTag,
+    'ZDUserRole': HelpCenter.user.role
+});
+
+$('#contact-step-1').on('dialogopen', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Window loaded',
+        'Window name': 'Contact Flow'
+    });
+});
+$('#user-type-field .select-control').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Type click'
+    });
+});
+$('#user-type-field .select-control-list li span').on('click', function(e) {
+    var type = $(this).attr('data-value');
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Type: ' + type
+    });
+});
+$('#category-field .select-control').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Category Click'
+    });
+});
+$('#category-field .select-control-list li span').on('click', function(e) {
+    if ( ! $(this).hasClass('has-child') ) {
+        var dataCategory = $(this).parents().eq(2).children('.has-child').text();
+        var dataCategoryID = $(this).parents().eq(2).children('.has-child').attr('data-category');
+        var dataSubCategory = $(this).text();
+        var dataSubCategoryID = $(this).attr('data-subcategory');
+        if ( dataCategory == '' ) {
+            dataLayer.push({
+                'event': 'CF event',
+                'Event title': 'Category - ' + dataSubCategory
+            });
+        } else {
+            dataLayer.push({
+                'event': 'CF event',
+                'Event title': 'Category - ' + dataCategory + ' > ' +dataSubCategory
+            });
+        }
+    }
+});
+$('#article-list li a').on('click', function(e) {
+    var topArticleID = $(this).attr('href').split('/').pop();
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'FAQ click - ' + topArticleID
+    });
+});
+$('#request_description').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Details click'
+    });
+});
+$('#contact-step-1-next').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Next click'
+    });
+});
+$('#submission_channel_select').on('dialogopen', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Window loaded',
+        'Window name': 'Support Channels Window'
+    });
+});
+$('#request-description-channel-field .textarea-control').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Details selected'
+    });
+});
+$('#support-channel-chat, #support-channel-chat-no-throttle').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Chat started'
+    });
+});
+$('.support-channel-ticket').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Submit a Reqeust selected'
+    });
+});
+$('.phone-number a').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Phone selected'
+    });
+});
+$('.support-channel-community').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Community selected'
+    });
+});
+$('.support-channel-hiring').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'HQ selected'
+    });
+});
+$('#request-description-field .textarea-control').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Details selected'
+    });
+});
+$('#contract-field .text-control').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Contract ID click'
+    });
+});
+$('#client-freelancer-field .text-control').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Contractor click'
+    });
+});
+$('#attachment-handler').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Attachment click'
+    });
+});
+$('.ui-dialog-titlebar-close').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'X clicked'
+    });
+});
+$('.close-contact-flow-modal').on('click', function(e) {
+    dataLayer.push({
+        'event': 'CF event',
+        'Event title': 'Cancel clicked'
+    });
+});
+$('#verify-init').on('click', function(e) {
+    dataLayer.push({ 'event': 'Verify Profile' });
+});
+
+$('form[role="search"]').on('submit', function(e) {
+    var $this = $(this),
+        query = $this.find('input[type="search"]').val().toLowerCase();
+    ga('send', 'event', 'Search', 'Submit', query);
+});
+
+/* Google Analytics Tracking. */
+
+});
