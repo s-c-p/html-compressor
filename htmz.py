@@ -10,14 +10,12 @@ import shutil
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
 
-op = os.path
-
 EXTN = ".htmz"
-ZIP = r'"C:\Program Files\7-Zip\7z.exe" a -tZIP -mx0 "{archiveName}" "{fileList}"'
 
-_silentExec = lambda string: subprocess.run(
-		shlex.split(string), stdout=subprocess.DEVNULL
-	)
+if sys.platform == "Win32":
+	starter = os.startfile
+else:
+	starter = lambda x: subprocess.run(f"xdg-open {x}", shell=True)
 
 class Archive:
 	name = str()
@@ -45,8 +43,8 @@ class PageZipper:
 
 	def _derive(self):
 		self.archive = Archive()
-		self.archive.name = op.basename(self.webpageTitle)
-		self.archive.absLocn = op.dirname(self.webpageTitle)
+		self.archive.name = os.path.basename(self.webpageTitle)
+		self.archive.absLocn = os.path.dirname(self.webpageTitle)
 		self.webPage = WebPage()
 		# we can't conclude webPage.htmlFile yet becuz EXTN is not none
 		self.webPage.contentsDir = self.webpageTitle + "_files"
@@ -57,8 +55,7 @@ class PageZipper:
 		# implicit type-conversion below, archive changes from Archive() to str
 		location = self.archive.absLocn
 		file_name = head + self.archive.name + EXTN
-		self.archive = op.join(location, file_name)
-		del location, file_name
+		self.archive = os.path.join(location, file_name)
 		# make string based on webpage contents
 		if self.webPage.htmlFile:
 			x1 = self.webPage.htmlFile
@@ -67,12 +64,13 @@ class PageZipper:
 			del x1, x2
 		else:
 			fileDirList = self.webPage.contentsDir
-		cmnd = ZIP.format(archiveName=self.archive, fileList=fileDirList)
-		_silentExec(cmnd)
+		exer = get7z()
+		cmnd = f'{exer} a -tZIP -mx0 "{self.archive}" "{fileDirList}"'
+		subprocess.run(shlex.split(cmnd), stdout=subprocess.DEVNULL)
 		try:
 			shutil.rmtree(self.webPage.contentsDir)
 		except OSError:
-			os.startfile(op.dirname(self.webPage.contentsDir))
+			starter(os.path.dirname(self.webPage.contentsDir))
 		# deletion of .htm is taken care by calling function completeCompress
 		# since incompleteCompress doesn't need it
 		return
@@ -84,24 +82,27 @@ class PageZipper:
 	def completeCompress(self, ext):
 		self.webPage.htmlFile = self.webpageTitle + ext
 		self._run_7z()
-		os.remove(self.webPage.htmlFile)
+		# os.remove(self.webPage.htmlFile)
 		return
 
 
 def decide_n_compress(aDir):
-	if op.isfile(aDir+".htm"):
+	if os.path.isfile(aDir+".htm"):
 		PageZipper(aDir).completeCompress(".htm")
-	elif op.isfile(aDir+".html"):
+	elif os.path.isfile(aDir+".html"):
 		PageZipper(aDir).completeCompress(".html")
 	else:
 		PageZipper(aDir).incompleteCompress()
 	return
 
+def decide_n_compress():
+	pass
+
 def compress(targetDir):
-	targetDir = op.abspath(targetDir)
+	targetDir = os.path.abspath(targetDir)
 	for root, dirs, files in os.walk(targetDir):
 		dirs = [x for x in dirs if x.endswith("_files")]
-		dirs = [op.join(root, x) for x in dirs]
+		dirs = [os.path.join(root, x) for x in dirs]
 		dirs = [x.replace("_files", '') for x in dirs]
 		# inside for loop to ensure recursive-ly found webpages are also
 		# cleaned.
@@ -109,14 +110,28 @@ def compress(targetDir):
 		# 	manyThreads.map(decide_n_compress, dirs)
 		# obsolete, single threaded approach
 		for _ in dirs:    decide_n_compress(_)
-	os.startfile(targetDir)
 	return
 
-def main(processList):
-	for i, j in enumerate(processList):
+def main(dirList):
+	for aDir in dirList:
 		# print("{} - {}".format(i, j))
-		compress(j)
+		compress(aDir)
+		starter(aDir)
+	return
+
+def get7z():
+	ps = [
+		r"C:\Program Files\7-Zip\7z.exe",
+		r"C:\Program Files (x86)\7-Zip\7z.exe",
+		"7zr"
+	]
+	for p in ps:
+		try:	ans = subprocess.run(p, stdout=subprocess.PIPE)
+		except:	pass
+		else:
+			if ans.stdout.startswith(b"\n7-Zip"):
+				return p
+	raise RuntimeError("Failed to locate 7-Zip exeutable")
 
 if __name__ == '__main__':
 	main(sys.argv[1:])
-
