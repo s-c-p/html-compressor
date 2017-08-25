@@ -95,8 +95,35 @@ def decide_n_compress(aDir):
 		PageZipper(aDir).incompleteCompress()
 	return
 
-def decide_n_compress():
+def completeCompress(archivePath, srcPath, resrcDirPath):
+	return
+
+def incompleteCompress():
 	pass
+
+@contextlib.contextmanager
+def rmdir_when_done(dir_name):
+	""" dir_name be abspath """
+	file_name_prefix = dir_name.replace("_files", "")
+	yield file_name_prefix
+	shutil.rmtree(dir_name)
+	return
+
+def decide_n_compress(dir_of_a_webpage):
+	with rmdir_when_done(dir_of_a_webpage) as file_name_prefix:
+		if os.path.isfile(file_name_prefix + ".htm"):
+			assoc_file_name = file_name_prefix + ".htm"
+		elif os.path.isfile(file_name_prefix + ".html"):
+			assoc_file_name = file_name_prefix + ".html"
+		else:
+			assoc_file_name = None
+		# ----------------------------------------------------------------
+		if assoc_file_name:
+			completeCompress(file_name_prefix, assoc_file_name, dir_name)
+			os.remove(assoc_file_name)
+		else:
+			incompleteCompress(file_name_prefix, dir_name)
+	return
 
 def compress(targetDir):
 	targetDir = os.path.abspath(targetDir)
