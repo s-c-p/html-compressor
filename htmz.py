@@ -1,7 +1,8 @@
 """
 	merge webpage and its associated folder into a single unit to reduce
 	clutter on hardisk and avoid false positives in duplicate file scans
-	TODO: large folder warning 
+	TODO: make compress() multithreaded
+	TODO: pause execution for large folder warning
 """
 
 import os
@@ -10,7 +11,6 @@ import shutil
 import zipfile
 import subprocess
 import contextlib
-from concurrent.futures import ThreadPoolExecutor
 
 EXTN = ".htmz"
 
@@ -34,6 +34,9 @@ def runZipper(transient_path, resrcDirPath, srcPath=None):
 	b = head + os.path.basename(transient_path) + EXTN
 	archivePath = os.path.join(a, b)
 	# and now do the compression
+	# NOTE this could be done with contextmanager handling dir change
+	# but doing so would take away the possibility of making this app
+	# multithreaded
 	with zipfile.ZipFile(archivePath, "w") as zfh:
 		# decide ref point for relpath
 		new_home = os.path.dirname(resrcDirPath)
@@ -69,20 +72,20 @@ def decide_n_compress(dir_of_a_webpage):
 			runZipper(file_name_prefix, dir_of_a_webpage)
 	return
 
-def compress(targetDir):
+def compress(targetDir: str):
 	targetDir = os.path.abspath(targetDir)
 	for root, dirs, files in os.walk(targetDir):
-		dirs = [x for x in dirs if x.endswith("_files")]
-		dirs = [os.path.join(root, x) for x in dirs]
 		# inside for loop to ensure recursive-ly found webpages are also
 		# cleaned.
-		for _ in dirs:    decide_n_compress(_)
-		# obsolete, multi threaded approach
-		# with ThreadPoolExecutor(max_workers=4) as manyThreads:
-		# 	manyThreads.map(decide_n_compress, dirs)
+		endswith_files = lambda x: x.endswith("_files")
+		build_abs_path = lambda x: os.path.join(root, x)
+		dirs = filter(endswith_files, dirs)
+		dirs = map(build_abs_path, dirs)
+		for _ in dirs:
+			decide_n_compress(_)
 	return
 
-def main(dirList):
+def main(dirList: list):
 	for aDir in dirList:
 		# print("{} - {}".format(i, j))
 		compress(aDir)
