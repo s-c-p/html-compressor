@@ -1,6 +1,7 @@
 """
 	merge webpage and its associated folder into a single unit to reduce
 	clutter on hardisk and avoid false positives in duplicate file scans
+	TODO: large folder warning 
 """
 
 import os
@@ -52,14 +53,6 @@ def runZipper(transient_path, resrcDirPath, srcPath=None):
 			zfh.write(filename=srcPath, arcname=os.path.basename(srcPath))
 	return
 
-def completeCompress(transient_path, resrcDirPath, srcPath):
-	runZipper(transient_path, resrcDirPath, srcPath)
-	return
-
-def incompleteCompress(transient_path, resrcDirPath):
-	runZipper(transient_path, resrcDirPath)
-	return
-
 def decide_n_compress(dir_of_a_webpage):
 	with rmdir_when_done(dir_of_a_webpage) as file_name_prefix:
 		if os.path.isfile(file_name_prefix + ".htm"):
@@ -70,10 +63,10 @@ def decide_n_compress(dir_of_a_webpage):
 			assoc_file_name = None
 		# ----------------------------------------------------------------
 		if assoc_file_name:
-			completeCompress(file_name_prefix, dir_of_a_webpage, assoc_file_name)
+			runZipper(file_name_prefix, dir_of_a_webpage, assoc_file_name)
 			os.remove(assoc_file_name)
 		else:
-			incompleteCompress(file_name_prefix, dir_of_a_webpage)
+			runZipper(file_name_prefix, dir_of_a_webpage)
 	return
 
 def compress(targetDir):
@@ -93,7 +86,8 @@ def main(dirList):
 	for aDir in dirList:
 		# print("{} - {}".format(i, j))
 		compress(aDir)
-		starter(aDir)
+		try:	starter(aDir)
+		except:	pass
 	return
 
 if __name__ == '__main__':
