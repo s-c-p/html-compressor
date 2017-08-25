@@ -5,11 +5,10 @@
 
 import os
 import sys
-import shlex
 import shutil
 import zipfile
-import contextlib
 import subprocess
+import contextlib
 from concurrent.futures import ThreadPoolExecutor
 
 EXTN = ".htmz"
@@ -27,49 +26,38 @@ def rmdir_when_done(dir_name):
 	shutil.rmtree(dir_name)
 	return
 
-def get7z():
-	ps = [
-		r"C:\Program Files\7-Zip\7z.exe",
-		r"C:\Program Files (x86)\7-Zip\7z.exe",
-		"7zr"
-	]
-	for p in ps:
-		try:	ans = subprocess.run(p, stdout=subprocess.PIPE)
-		except:	pass
-		else:
-			if ans.stdout.startswith(b"\n7-Zip"):
-				return p
-	raise RuntimeError("Failed to locate 7-Zip exeutable")
-
-def _run_7z(transient_path, resrcDirPath, srcPath=None):
-	if srcPath:
-		head = "HTM--- "
-		fileDirList = resrcDirPath + '" "' + srcPath
-	else:# if incomplete:
-		head = "(incomplete) HTM--- "
-		fileDirList = resrcDirPath
+def runZipper(transient_path, resrcDirPath, srcPath=None):
+	# derive the appropriate archivePath first
+	head = "HTM--- " if srcPath else "(incomplete) HTM--- "
 	a = os.path.dirname(transient_path)
 	b = head + os.path.basename(transient_path) + EXTN
 	archivePath = os.path.join(a, b)
+	# and now do the compression
 	with zipfile.ZipFile(archivePath, "w") as zfh:
+		# decide ref point for relpath
+		new_home = os.path.dirname(resrcDirPath)
+		for r, d, files in os.walk(resrcDirPath):
+			for f in files:
+				locn_on_disk = os.path.join(r, f)
+				locn_on_arcv = os.path.relpath(locn_on_disk, new_home)
+				zfh.write(filename=locn_on_disk, arcname=locn_on_arcv)
+			# if there ara any empty dirs (like ..._files/assets/apple) which
+			# are empty then they are not written (hence lost) in zip file
+			# although there is no point in preserving empty folders since
+			# it isn;t refrenced by any code or has any assets but still we
+			# will try to preserve it, maybe JUST maybe the name of folder
+			# carries some SPECIAL significance
+		# if .htm* exists, write it at root
 		if srcPath:
-			??? op.relpath or
-			??? op.basename(srcPath)
-			zfh.write(srcPath)
-		zfh.write(resrcDirPath)
-		# for r, d, f in os.walk()
-	# exer = get7z()
-	# cmnd = f'{exer} a -tZIP -mx=0 "{archivePath}" "{fileDirList}"'
-	# print(cmnd);	input();
-	# subprocess.run(shlex.split(cmnd), stdout=subprocess.DEVNULL)
+			zfh.write(filename=srcPath, arcname=os.path.basename(srcPath))
 	return
 
 def completeCompress(transient_path, resrcDirPath, srcPath):
-	_run_7z(transient_path, resrcDirPath, srcPath)
+	runZipper(transient_path, resrcDirPath, srcPath)
 	return
 
 def incompleteCompress(transient_path, resrcDirPath):
-	_run_7z(transient_path, resrcDirPath)
+	runZipper(transient_path, resrcDirPath)
 	return
 
 def decide_n_compress(dir_of_a_webpage):
