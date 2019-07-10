@@ -6,4 +6,4 @@ A python 3 script to merge webpage and its associated folder into a single unit 
 Todo
 ----
 
- - long path give WinError3
+ - long path raising WinError3
